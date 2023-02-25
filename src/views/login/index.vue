@@ -41,8 +41,11 @@
               <n-input
               v-model:value="formInline.code"
               placeholder="请输入验证码"
-              />
-              <img @click="resetCode" :src="codeUrl" alt="">
+              >
+                <template #suffix>
+                  <img @click="resetCode" :src="codeUrl" alt="" style="cursor: pointer">
+                </template>
+              </n-input>
             </div>
           </n-form-item>
           <n-form-item class="default-color">
