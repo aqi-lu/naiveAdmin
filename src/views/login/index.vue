@@ -36,6 +36,15 @@
               </template>
             </n-input>
           </n-form-item>
+          <n-form-item>
+            <div style="display:flex">
+              <n-input
+              v-model:value="formInline.code"
+              placeholder="请输入验证码"
+              />
+              <img @click="resetCode" :src="codeUrl" alt="">
+            </div>
+          </n-form-item>
           <n-form-item class="default-color">
             <div class="flex justify-between">
               <div class="flex-initial">
@@ -69,6 +78,7 @@
   interface FormState {
     username: string;
     password: string;
+    code: string;
   }
 
   const formRef = ref();
@@ -76,11 +86,15 @@
   const loading = ref(false);
   const autoLogin = ref(true);
   const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME;
+  const codeUrl = ref<string>('/api/user/code')
+
+  const resetCode = () => codeUrl.value = codeUrl.value + '?' + Math.random()
 
   const formInline = reactive({
     username: 'admin',
     password: '123456',
     isCaptcha: true,
+    code: ''
   });
 
   const rules = {
@@ -97,13 +111,14 @@
     e.preventDefault();
     formRef.value.validate(async (errors) => {
       if (!errors) {
-        const { username, password } = formInline;
+        const { username, password, code } = formInline;
         message.loading('登录中...');
         loading.value = true;
 
         const params: FormState = {
           username,
           password,
+          code,
         };
 
         try {
